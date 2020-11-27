@@ -6,48 +6,51 @@
 /*   By: jgao <jgao@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/23 10:36:59 by jgao              #+#    #+#             */
-/*   Updated: 2020/11/26 13:49:59 by jgao             ###   ########.fr       */
+/*   Updated: 2020/11/27 11:45:12 by jgao             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-// #include <stdio.h>
-// #include <unistd.h>
+/*
+#include <stdio.h>
+#include <unistd.h>
 
-// #include <limits.h>
+#include <limits.h>
 
-// void	ft_putchar(char c)
-// {
-// 	write(1, &c, 1);
-// }
-
-
-// void	ft_putnbr(int nb)
-// {
-// 	if (nb == INT_MIN)
-// 	{
-// 		ft_putchar('-');
-// 		ft_putnbr(nb / -10);
-// 	}
-// 	if (nb < 0 && nb != INT_MIN)
-// 	{
-// 		ft_putchar('-');
-// 		nb = -nb;
-// 	}
-// 	if (nb / 10 != 0 && nb != INT_MIN)
-// 		ft_putnbr(nb / 10);
-// 	if (nb == INT_MIN)
-// 		ft_putchar((nb % 10 * -1) + '0');
-// 	else
-// 		ft_putchar(nb % 10 + '0');
-// }
+void	ft_putchar(char c)
+{
+	write(1, &c, 1);
+}
 
 
-// void	ft_putstr(char *s)
-// {
-// 	write(1, s, ft_strlen(s));
-// }
+void	ft_putnbr(int nb)
+{
+	if (nb == INT_MIN)
+	{
+		ft_putchar('-');
+		ft_putnbr(nb / -10);
+	}
+	if (nb < 0 && nb != INT_MIN)
+	{
+		ft_putchar('-');
+		nb = -nb;
+	}
+	if (nb / 10 != 0 && nb != INT_MIN)
+		ft_putnbr(nb / 10);
+	if (nb == INT_MIN)
+		ft_putchar((nb % 10 * -1) + '0');
+	else
+		ft_putchar(nb % 10 + '0');
+}
+
+
+void	ft_putstr(char *s)
+{
+	write(1, s, ft_strlen(s));
+}
+
+*/
 
 int			clearbuffer(char *buffer)
 {
@@ -77,7 +80,7 @@ static int	readbuffer(char *buffer, char **line)
 	size_t	blen;
 	size_t	llen;
 
-	if (!buffer)
+	if (!buffer || !*buffer)
 		return (-1);
 	blen = custom_strlen(buffer);
 	if (!(*line = ft_realloc(*line, blen)))
@@ -101,7 +104,7 @@ int	get_next_line(int fd, char **line)
 
 	ret = 0;
 	readret = 1;
-	if (fd < 0 || BUFFER_SIZE < 1 || read(fd, buffer[fd], 0) < 0)
+	if (fd < 0 || BUFFER_SIZE < 1 || read(fd, buffer[fd], 0) < 0 || !line)
 		return (-1);
 	*line = NULL;
 	while (readret > 0 && ret != 1)
@@ -120,34 +123,47 @@ int	get_next_line(int fd, char **line)
 	return (0);
 }
 
-// #include <sys/types.h>
-// #include <sys/stat.h>
-// #include <fcntl.h>
+/*
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <stdio.h>
 
-// int	main(int ac, char **av)
-// {
-// 	char	*str = NULL;
-// 	int		fd[ac];
-// 	int		ret = 1;
-// 	int		i = 1;
+int	main(int ac, char **av)
+{
+	char	*string;
+	char	**str;
+	int		fd[ac];
+	int		ret = 1;
+	int		i = 1;
+	int		indtab = 0;
 
-// 	if (ac < 1)
-// 		return (0);
-// 	while (i < ac)
-// 	{
-// 		printf("File name = %s\n", av[i]);
-// 		if ((fd[i] = open(av[i], O_RDONLY)) < 0)
-// 			return (0);
-// 		while (ret > 0)
-// 		{
-// 			ret = get_next_line(fd[i], &str);
-// 			printf("ret = %d, str = %s\n", ret, str);
-// 			usleep(20000);
-// 		}
-// 		close(fd[i]);
-// 		ret = 1;
-// 		i++;
-// 	}
-// 	free(str);
-// 	return (0);
-// }
+	if (ac < 1)
+		return (0);
+	str = malloc(sizeof(char *) * 7);
+	str[6] = NULL;
+	while (i < ac)
+	{
+		printf("File name = %s\n", av[i]);
+		if ((fd[i] = open(av[i], O_RDONLY)) < 0)
+			return (0);
+		while (ret > 0)
+		{
+			ret = get_next_line(fd[i], &string);
+			printf("ret = %d, str = %s\n", ret, string);
+			str[indtab++] = string;
+		}
+		close(fd[i]);
+		ret = 1;
+		i++;
+	}
+	indtab = 0;
+	while (str[indtab])
+	{
+		printf("%s\n", str[indtab]);
+		free(str[indtab++]);
+	}
+	free(str);
+	return (0);
+}
+*/
