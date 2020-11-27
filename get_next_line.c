@@ -6,7 +6,7 @@
 /*   By: jgao <jgao@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/23 10:36:59 by jgao              #+#    #+#             */
-/*   Updated: 2020/11/27 11:45:12 by jgao             ###   ########.fr       */
+/*   Updated: 2020/11/27 11:56:18 by jgao             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ int			clearbuffer(char *buffer)
 
 	i = 0;
 	u = 0;
-	while (buffer[i] != '\n' && buffer[i])
+	while (buffer[i] != '\n')
 		i++;
 	if (buffer[i] == '\n')
 		ret = 1;
@@ -80,7 +80,7 @@ static int	readbuffer(char *buffer, char **line)
 	size_t	blen;
 	size_t	llen;
 
-	if (!buffer || !*buffer)
+	if (!buffer)
 		return (-1);
 	blen = custom_strlen(buffer);
 	if (!(*line = ft_realloc(*line, blen)))
@@ -109,12 +109,13 @@ int	get_next_line(int fd, char **line)
 	*line = NULL;
 	while (readret > 0 && ret != 1)
 	{
-		if ((ret = readbuffer(buffer[fd], line)) == -1)
-		{
-			if ((readret = read(fd, buffer[fd], BUFFER_SIZE)) < 0)
-				return (-1);
-			buffer[fd][readret] = '\0';
-		}
+		if (readret > 0)
+			if ((ret = readbuffer(buffer[fd], line)) == -1)
+			{
+				if ((readret = read(fd, buffer[fd], BUFFER_SIZE)) < 0)
+					return (-1);
+				buffer[fd][readret] = '\0';
+			}
 		if (ret == -2)
 			return (-1);
 	}
